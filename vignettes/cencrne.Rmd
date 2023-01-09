@@ -1,0 +1,112 @@
+---
+title: "cencrne"
+author: "Mingyang Ren"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cencrne}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Table of contents
+1. [Description](#Description)
+2. [Methodology](#Methodology)
+3. [Quick Start](#Quick Start)
+
+
+
+
+# Description
+Consistent Estimation of the Number of Communities via Regularized Network Embedding:
+The network analysis plays an important role in numerous application domains including biomedicine. Estimation of the number of communities is a fundamental and critical issue in network analysis. Most existing studies assume that the number of communities is known a priori, or lack of rigorous theoretical guarantee on the estimation consistency. This method proposes a regularized network embedding model to simultaneously estimate the community structure and the number of communities in a unified formulation. The proposed model equips network embedding with a novel composite regularization term, which pushes the embedding vector towards its center and pushes similar community centers collapsed with each other. A rigorous theoretical analysis is conducted, establishing asymptotic consistency in terms of community detection and estimation of the number of communities. 
+
+
+
+# Methodology
+
+## Model setting
+
+Consider an undirected network with $n$ nodes and a symmetric adjacency matrix $\boldsymbol{A} = (a_{ij})^{n}_{i,j=1}$ with $a_{ij} \in \{0,1\}$, where $a_{ij}=1$ if there is an edge between node $i$ and node $j$, and $a_{ij}=0$ otherwise.
+To incorporate node heterogeneity, we consider the network embedding model, 
+\begin{equation}\label{generate}
+	\begin{aligned}
+		a_{i j}=a_{j i} \stackrel{i n d .}{\sim} \operatorname{Bernoulli} (p_{i j}) \ \text{with} \ \operatorname{logit}\left(p_{i j}\right)=\log \frac{p_{i j}}{1-p_{i j}}=\boldsymbol{z}_{i}^{T} \boldsymbol{z}_{j} ,
+	\end{aligned}
+\end{equation}
+for any $i < j$, where $\boldsymbol{z}_{i}$ is the embedding vector of node $i$ in an $r$-dimensional space with $r \ll n$. The embedding vectors preserve the inherent structure of the undirected network, in that the embedding vectors of similar nodes shall be close as well. Consequently, a community in the undirected network correspond to a subset of nodes whose embedding vectors may vary one from another but are all tightly clustered together in the same neighborhood.  Specifically, each node $i$ with the embedding vector $\boldsymbol{z}_{i}$ corresponds to a community center, denoted by $\boldsymbol{b}_i$, and two nodes $i$ and $j$ are said to be in the same community if and only if they share the same community center, $\boldsymbol{b}_i = \boldsymbol{b}_j$.
+
+
+## Reguarlized network embedding
+
+We propose a regularized network embedding model to jointly estimate the community structure and the unknown community number. Let $\boldsymbol{Z} = ( \boldsymbol{z}_1, \cdots, \boldsymbol{z}_n )^{\top}$, and $L(\boldsymbol{Z}; \boldsymbol{A}) = \frac{1}{n^2} \sum_{i,j=1}^{n}\left\{  \log [ 1+\exp (\boldsymbol{z}_{i}^{\top} \boldsymbol{z}_{j} )]  - \boldsymbol{z}_{i}^{\top} \boldsymbol{z}_{j} a_{i j}  \right\}$ denotes the negative log-likelihood of the network embedding model in (\ref{generate}). The proposed model is formulated as a form of regularization likelihood,
+\begin{equation}
+  \begin{aligned}
+		\min_{\boldsymbol{Z}, \boldsymbol{B}}  Q( \boldsymbol{Z}, \boldsymbol{B}; \boldsymbol{A} ) & = L(\boldsymbol{Z}; \boldsymbol{A}) + J_1 (\boldsymbol{Z}, \boldsymbol{B}) + J_2 ( \boldsymbol{B}) + J_3 (\boldsymbol{Z}), \\
+		J_1 (\boldsymbol{Z}, \boldsymbol{B}) & = \lambda_1 \| \boldsymbol{Z} - \boldsymbol{B} \|_F^2, \\
+		J_2 (\boldsymbol{B}) & = \sum_{i<j} \omega_{ij} p ( \| \boldsymbol{b}_i - \boldsymbol{b}_j \|_2; \lambda_2), \\
+		J_3 (\boldsymbol{Z}) & = \sum_{m=1}^{r^{\prime}} p ( \| \boldsymbol{Z}_{(m)} \|_2; \lambda_3 ),
+		\end{aligned}
+\end{equation}
+where $\boldsymbol{Z}_{(m)}$ is the $m$-th column of $\boldsymbol{Z}$,
+$\boldsymbol{B} = ( \boldsymbol{b}_1, \cdots, \boldsymbol{b}_n )^{\top}$ with community center $\boldsymbol{b}_i \in \mathbb{R}^{r}$, $\omega_{ij} \in \{ 0, 1\}$ determines the weight on the fusion penalty between $\boldsymbol{b}_i$ and $\boldsymbol{b}_j$, $\lambda_1$ and  $\lambda_2$ are two positive tuning parameters, and $p(t ; \lambda)$ can be any concave regularization term. We adopt the minimax concave penalty (MCP). As for $\omega_{ij}$, a natural choice is to set $\omega_{ij}=1$ for all $(i,j)$ pairs.
+
+
+
+# Quick Start
+
+First, we call the built-in simulation data set ($K^* = 4$) and the sequences of the tuning parameters ($\lambda_1$, $\lambda_2$, and $\lambda_3$).
+```{r eval=FALSE}
+library(cencrne)
+# example.data
+data(example.data)
+A                   = example.data$A
+K.true              = example.data$K.true
+Z.true              = example.data$Z.true
+B.true              = example.data$B.true
+P.true              = example.data$P.true
+Theta.true          = example.data$Theta.true
+cluster.matrix.true = example.data$cluster.matrix.true
+
+n       = dim(A)[1]
+lam.max = 3
+lam.min = 0.5
+lam1.s  = 2/log(n)
+lam2.s  = sqrt(8*log(n)/n)
+lam3.s  = 1/8/log(n)/sqrt(n)
+lambda  = genelambda.obo(nlambda1=3,lambda1_max=lam.max*lam1.s,lambda1_min=lam.min*lam1.s,
+                         nlambda2=10,lambda2_max=lam.max*lam2.s,lambda2_min=lam.min*lam2.s,
+                         nlambda3=1,lambda3_max=lam.max*lam3.s,lambda3_min=lam.min*lam3.s)
+
+```
+
+Apply the proposed method.
+```{r eval=FALSE}
+sample.index.n = rbind(combn(n,2),1:(n*(n-1)/2))
+int.list       = gen.int(A)
+Z.int          = int.list$Z.int
+B.int          = int.list$B.int
+res            = network.comm.num(A, sample.index.n, lambda, Z.int, B.int)
+
+# output results
+K.hat = res$Opt_K # the estimated number of communities
+Z.hat = res$Opt_Z # the estimated embedding vectors corresponding to n nodes
+cluster.matrix.hat = res$Opt_cluster.matrix # the n * n estimated membership matrix
+evaluation(Z.hat, Z.true, cluster.matrix.hat, cluster.matrix.true,
+           P.true, Theta.true, K.hat, K.true)
+
+```
+
+## References:
+
+* Ren, M., Zhang S. and Wang J. (2022+). Consistent Estimation of the Number of Communities via Regularized Network Embedding.
+
+
+
+

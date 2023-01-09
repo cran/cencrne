@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mingyang Ren" />
+
+
+<title>cencrne</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">cencrne</h1>
+<h4 class="author">Mingyang Ren</h4>
+
+
+
+<div id="table-of-contents" class="section level1">
+<h1>Table of contents</h1>
+<ol style="list-style-type: decimal">
+<li><a href="#Description">Description</a></li>
+<li><a href="#Methodology">Methodology</a></li>
+<li><a href="#Quick%20Start">Quick Start</a></li>
+</ol>
+</div>
+<div id="description" class="section level1">
+<h1>Description</h1>
+<p>Consistent Estimation of the Number of Communities via Regularized
+Network Embedding: The network analysis plays an important role in
+numerous application domains including biomedicine. Estimation of the
+number of communities is a fundamental and critical issue in network
+analysis. Most existing studies assume that the number of communities is
+known a priori, or lack of rigorous theoretical guarantee on the
+estimation consistency. This method proposes a regularized network
+embedding model to simultaneously estimate the community structure and
+the number of communities in a unified formulation. The proposed model
+equips network embedding with a novel composite regularization term,
+which pushes the embedding vector towards its center and pushes similar
+community centers collapsed with each other. A rigorous theoretical
+analysis is conducted, establishing asymptotic consistency in terms of
+community detection and estimation of the number of communities.</p>
+</div>
+<div id="methodology" class="section level1">
+<h1>Methodology</h1>
+<div id="model-setting" class="section level2">
+<h2>Model setting</h2>
+<p>Consider an undirected network with <span class="math inline">\(n\)</span> nodes and a symmetric adjacency matrix
+<span class="math inline">\(\boldsymbol{A} =
+(a_{ij})^{n}_{i,j=1}\)</span> with <span class="math inline">\(a_{ij}
+\in \{0,1\}\)</span>, where <span class="math inline">\(a_{ij}=1\)</span> if there is an edge between node
+<span class="math inline">\(i\)</span> and node <span class="math inline">\(j\)</span>, and <span class="math inline">\(a_{ij}=0\)</span> otherwise. To incorporate node
+heterogeneity, we consider the network embedding model, <span class="math display">\[\begin{equation}\label{generate}
+    \begin{aligned}
+        a_{i j}=a_{j i} \stackrel{i n d .}{\sim}
+\operatorname{Bernoulli} (p_{i j}) \ \text{with} \
+\operatorname{logit}\left(p_{i j}\right)=\log \frac{p_{i j}}{1-p_{i
+j}}=\boldsymbol{z}_{i}^{T} \boldsymbol{z}_{j} ,
+    \end{aligned}
+\end{equation}\]</span> for any <span class="math inline">\(i &lt;
+j\)</span>, where <span class="math inline">\(\boldsymbol{z}_{i}\)</span> is the embedding
+vector of node <span class="math inline">\(i\)</span> in an <span class="math inline">\(r\)</span>-dimensional space with <span class="math inline">\(r \ll n\)</span>. The embedding vectors preserve
+the inherent structure of the undirected network, in that the embedding
+vectors of similar nodes shall be close as well. Consequently, a
+community in the undirected network correspond to a subset of nodes
+whose embedding vectors may vary one from another but are all tightly
+clustered together in the same neighborhood. Specifically, each node
+<span class="math inline">\(i\)</span> with the embedding vector <span class="math inline">\(\boldsymbol{z}_{i}\)</span> corresponds to a
+community center, denoted by <span class="math inline">\(\boldsymbol{b}_i\)</span>, and two nodes <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are said to be in the same community if
+and only if they share the same community center, <span class="math inline">\(\boldsymbol{b}_i = \boldsymbol{b}_j\)</span>.</p>
+</div>
+<div id="reguarlized-network-embedding" class="section level2">
+<h2>Reguarlized network embedding</h2>
+<p>We propose a regularized network embedding model to jointly estimate
+the community structure and the unknown community number. Let <span class="math inline">\(\boldsymbol{Z} = ( \boldsymbol{z}_1, \cdots,
+\boldsymbol{z}_n )^{\top}\)</span>, and <span class="math inline">\(L(\boldsymbol{Z}; \boldsymbol{A}) = \frac{1}{n^2}
+\sum_{i,j=1}^{n}\left\{ \log [ 1+\exp (\boldsymbol{z}_{i}^{\top}
+\boldsymbol{z}_{j} )] - \boldsymbol{z}_{i}^{\top} \boldsymbol{z}_{j}
+a_{i j} \right\}\)</span> denotes the negative log-likelihood of the
+network embedding model in (<span class="math inline">\(\ref{generate}\)</span>). The proposed model is
+formulated as a form of regularization likelihood, <span class="math display">\[\begin{equation}
+  \begin{aligned}
+        \min_{\boldsymbol{Z}, \boldsymbol{B}}  Q( \boldsymbol{Z},
+\boldsymbol{B}; \boldsymbol{A} ) &amp; = L(\boldsymbol{Z};
+\boldsymbol{A}) + J_1 (\boldsymbol{Z}, \boldsymbol{B}) + J_2 (
+\boldsymbol{B}) + J_3 (\boldsymbol{Z}), \\
+        J_1 (\boldsymbol{Z}, \boldsymbol{B}) &amp; = \lambda_1 \|
+\boldsymbol{Z} - \boldsymbol{B} \|_F^2, \\
+        J_2 (\boldsymbol{B}) &amp; = \sum_{i&lt;j} \omega_{ij} p ( \|
+\boldsymbol{b}_i - \boldsymbol{b}_j \|_2; \lambda_2), \\
+        J_3 (\boldsymbol{Z}) &amp; = \sum_{m=1}^{r^{\prime}} p ( \|
+\boldsymbol{Z}_{(m)} \|_2; \lambda_3 ),
+        \end{aligned}
+\end{equation}\]</span> where <span class="math inline">\(\boldsymbol{Z}_{(m)}\)</span> is the <span class="math inline">\(m\)</span>-th column of <span class="math inline">\(\boldsymbol{Z}\)</span>, <span class="math inline">\(\boldsymbol{B} = ( \boldsymbol{b}_1, \cdots,
+\boldsymbol{b}_n )^{\top}\)</span> with community center <span class="math inline">\(\boldsymbol{b}_i \in \mathbb{R}^{r}\)</span>,
+<span class="math inline">\(\omega_{ij} \in \{ 0, 1\}\)</span>
+determines the weight on the fusion penalty between <span class="math inline">\(\boldsymbol{b}_i\)</span> and <span class="math inline">\(\boldsymbol{b}_j\)</span>, <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are two positive tuning
+parameters, and <span class="math inline">\(p(t ; \lambda)\)</span> can
+be any concave regularization term. We adopt the minimax concave penalty
+(MCP). As for <span class="math inline">\(\omega_{ij}\)</span>, a
+natural choice is to set <span class="math inline">\(\omega_{ij}=1\)</span> for all <span class="math inline">\((i,j)\)</span> pairs.</p>
+</div>
+</div>
+<div id="quick-start" class="section level1">
+<h1>Quick Start</h1>
+<p>First, we call the built-in simulation data set (<span class="math inline">\(K^* = 4\)</span>) and the sequences of the tuning
+parameters (<span class="math inline">\(\lambda_1\)</span>, <span class="math inline">\(\lambda_2\)</span>, and <span class="math inline">\(\lambda_3\)</span>).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cencrne)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># example.data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(example.data)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>A                   <span class="ot">=</span> example.data<span class="sc">$</span>A</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>K.true              <span class="ot">=</span> example.data<span class="sc">$</span>K.true</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>Z.true              <span class="ot">=</span> example.data<span class="sc">$</span>Z.true</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>B.true              <span class="ot">=</span> example.data<span class="sc">$</span>B.true</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>P.true              <span class="ot">=</span> example.data<span class="sc">$</span>P.true</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Theta.true          <span class="ot">=</span> example.data<span class="sc">$</span>Theta.true</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>cluster.matrix.true <span class="ot">=</span> example.data<span class="sc">$</span>cluster.matrix.true</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>n       <span class="ot">=</span> <span class="fu">dim</span>(A)[<span class="dv">1</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>lam.max <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>lam.min <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>lam1.s  <span class="ot">=</span> <span class="dv">2</span><span class="sc">/</span><span class="fu">log</span>(n)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>lam2.s  <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">8</span><span class="sc">*</span><span class="fu">log</span>(n)<span class="sc">/</span>n)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>lam3.s  <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span><span class="sc">/</span><span class="fu">log</span>(n)<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>lambda  <span class="ot">=</span> <span class="fu">genelambda.obo</span>(<span class="at">nlambda1=</span><span class="dv">3</span>,<span class="at">lambda1_max=</span>lam.max<span class="sc">*</span>lam1.s,<span class="at">lambda1_min=</span>lam.min<span class="sc">*</span>lam1.s,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                         <span class="at">nlambda2=</span><span class="dv">10</span>,<span class="at">lambda2_max=</span>lam.max<span class="sc">*</span>lam2.s,<span class="at">lambda2_min=</span>lam.min<span class="sc">*</span>lam2.s,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                         <span class="at">nlambda3=</span><span class="dv">1</span>,<span class="at">lambda3_max=</span>lam.max<span class="sc">*</span>lam3.s,<span class="at">lambda3_min=</span>lam.min<span class="sc">*</span>lam3.s)</span></code></pre></div>
+<p>Apply the proposed method.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sample.index.n <span class="ot">=</span> <span class="fu">rbind</span>(<span class="fu">combn</span>(n,<span class="dv">2</span>),<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">*</span>(n<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>int.list       <span class="ot">=</span> <span class="fu">gen.int</span>(A)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Z.int          <span class="ot">=</span> int.list<span class="sc">$</span>Z.int</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>B.int          <span class="ot">=</span> int.list<span class="sc">$</span>B.int</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>res            <span class="ot">=</span> <span class="fu">network.comm.num</span>(A, sample.index.n, lambda, Z.int, B.int)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># output results</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>K.hat <span class="ot">=</span> res<span class="sc">$</span>Opt_K <span class="co"># the estimated number of communities</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Z.hat <span class="ot">=</span> res<span class="sc">$</span>Opt_Z <span class="co"># the estimated embedding vectors corresponding to n nodes</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>cluster.matrix.hat <span class="ot">=</span> res<span class="sc">$</span>Opt_cluster.matrix <span class="co"># the n * n estimated membership matrix</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">evaluation</span>(Z.hat, Z.true, cluster.matrix.hat, cluster.matrix.true,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>           P.true, Theta.true, K.hat, K.true)</span></code></pre></div>
+<div id="references" class="section level2">
+<h2>References:</h2>
+<ul>
+<li>Ren, M., Zhang S. and Wang J. (2022+). Consistent Estimation of the
+Number of Communities via Regularized Network Embedding.</li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
